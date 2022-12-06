@@ -22,7 +22,7 @@ impl Shape {
 }
 
 fn main() {
-    let input_data = include_str!("input.txt");
+    let input_lines = util::get_input_lines();
 
     let mut lookup = HashMap::new();
     lookup.insert('A', Shape::Rock);
@@ -32,8 +32,8 @@ fn main() {
     lookup.insert('Y', Shape::Paper);
     lookup.insert('Z', Shape::Scissor);
 
-    let score_one: u32 = input_data
-        .lines()
+    let score_one: u32 = input_lines
+        .iter()
         .filter(|line| !line.is_empty())
         .map(|line| {
             let (left, right) = line.split_once(' ').unwrap();
@@ -53,8 +53,8 @@ fn main() {
         .sum();
     println!("Total score 1: {score_one}");
 
-    let score_two: u32 = input_data
-        .lines()
+    let score_two: u32 = input_lines
+        .iter()
         .filter(|line| !line.is_empty())
         .map(|line| {
             let (left, right) = line.split_once(' ').unwrap();
