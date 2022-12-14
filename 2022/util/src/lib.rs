@@ -22,3 +22,19 @@ pub fn get_input_lines() -> Vec<String> {
 pub fn chebyshev_distance_2d(p1_x: i32, p1_y: i32, p2_x: i32, p2_y: i32) -> i32 {
     max((p1_x - p2_x).abs(), (p1_y - p2_y).abs())
 }
+
+pub fn gcd(mut a: u64, mut b: u64) -> u64 {
+    while b != 0 {
+        let tmp = a % b;
+        a = b;
+        b = tmp;
+    }
+    a
+}
+
+pub fn lcm(a: u64, b: u64) -> u64 {
+    if a == 0 || b == 0 {
+        return 0;
+    }
+    a * (b / gcd(a, b))
+}
