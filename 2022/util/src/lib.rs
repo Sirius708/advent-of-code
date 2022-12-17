@@ -49,3 +49,51 @@ pub fn lcm(a: u64, b: u64) -> u64 {
     }
     a * (b / gcd(a, b))
 }
+
+/// [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
+pub fn find_shortest_distance<T, F1, F2>(
+    start: T,
+    goal: T,
+    get_successors: F1,
+    goal_distance_estimate: F2,
+) -> Option<u32>
+where
+    T: Eq + Hash + Copy,
+    F1: Fn(T) -> Vec<(T, u32)>,
+    F2: Fn(T) -> u32,
+{
+    let mut visited_nodes = HashSet::new();
+    let mut open_nodes = PriorityQueue::new();
+    open_nodes.push(start, Reverse(0));
+    let mut start_distance = HashMap::new();
+    start_distance.insert(start, 0);
+
+    while let Some((current_node, _)) = open_nodes.pop() {
+        if current_node == goal {
+            return Some(start_distance[&current_node]);
+        }
+
+        visited_nodes.insert(current_node);
+
+        for (successor, successor_distance) in get_successors(current_node) {
+            if visited_nodes.contains(&successor) {
+                continue;
+            }
+
+            let current_start_distance = start_distance[&current_node];
+            let successor_start_distance = current_start_distance + successor_distance;
+
+            if let Some(distance) = start_distance.get(&successor) {
+                if *distance < successor_start_distance {
+                    continue;
+                }
+            }
+
+            start_distance.insert(successor, successor_start_distance);
+
+            let successor_cost = successor_start_distance + goal_distance_estimate(successor);
+            open_nodes.push(successor, Reverse(successor_cost));
+        }
+    }
+    None
+}
