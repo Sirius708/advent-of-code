@@ -12,9 +12,12 @@ fn get_input_file() -> &'static str {
     }
 }
 
+pub fn get_input_string() -> String {
+    std::fs::read_to_string(get_input_file()).unwrap()
+}
+
 pub fn get_input_lines() -> Vec<String> {
-    std::fs::read_to_string(get_input_file())
-        .unwrap()
+    get_input_string()
         .lines()
         .map(|line| line.to_owned())
         .collect()
